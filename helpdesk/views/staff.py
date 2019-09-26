@@ -78,7 +78,11 @@ def _has_access_to_queue(user, queue):
 def _is_my_ticket(user, ticket):
     """Check to see if the user has permission to access
     a ticket. If not then deny access."""
-    if user.is_superuser or user.is_staff or user.id == ticket.assigned_to.id:
+    try:
+        user_is_submitter = user.email == ticket.submitter_email
+    except:
+        user_is_submitter = False
+    if user.is_superuser or user.is_staff or user.id == ticket.assigned_to.id or user_is_submitter:
         return True
     else:
         return False
@@ -350,15 +354,19 @@ def subscribe_staff_member_to_ticket(ticket, user):
 
 
 def update_ticket(request, ticket_id, public=False):
+    try:
+        ticket = get_object_or_404(Ticket, id=ticket_id)
+        user_is_submitter = (request.user.email == ticket.submitter_email)
+    except:
+        user_is_submitter = False
     if not (public or (
             request.user.is_authenticated and
             request.user.is_active and (
                 request.user.is_staff or
-                helpdesk_settings.HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE))):
+                helpdesk_settings.HELPDESK_ALLOW_NON_STAFF_TICKET_UPDATE or
+                user_is_submitter))):
         return HttpResponseRedirect('%s?next=%s' %
                                     (reverse('helpdesk:login'), request.path))
-
-    ticket = get_object_or_404(Ticket, id=ticket_id)
 
     date_re = re.compile(
         r'(?P<month>\d{1,2})/(?P<day>\d{1,2})/(?P<year>\d{4})$'
