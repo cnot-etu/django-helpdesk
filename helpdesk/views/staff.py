@@ -579,6 +579,16 @@ def update_ticket(request, ticket_id, public=False):
                 )
                 messages_sent_to.append(cc.email_address)
 
+    if f.user != old_owner:
+        send_templated_mail(
+            'assigned_owner',
+             context,
+             recipients=f.user,
+             sender=ticket.queue.from_address,
+             fail_silently=True,
+             files=files,
+         )
+
     if ticket.assigned_to and \
             request.user != ticket.assigned_to and \
             ticket.assigned_to.email and \
