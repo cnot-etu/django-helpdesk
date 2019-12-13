@@ -80,3 +80,13 @@ img.brand {padding-right: 30px;}
 div.card-body img {
 	max-width: 900px;
 }
+
+@media (min-width:320px) and (max-width:768px) {
+    #container > #body > .col-xs-6 {
+        width: 100%;
+        clear: both;
+    }
+    #header > h1 {
+        padding:10px;
+    }
+}
