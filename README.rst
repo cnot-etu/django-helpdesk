@@ -57,6 +57,19 @@ For more information, see this note_ in the Django documentation.
 When you try to do a keyword search using `sqlite`, a message will be displayed
 to alert you to this shortcoming. There is no way around it, sorry.
 
+portable HTML-form like tech support button
+------------
+add templates/helpdesk/helpdesk-input-form.html like::
+    <%include file="path/to/html/helpdesk-input-form.html" />
+and change to youth queues by::
+        <select class="input-list-selection" id="select_type">
+          <option value="">${_('Queue')}</option>
+          <option value="1">${_('While taking course')}</option>
+          <option value="2">${_('While creating course')}</option>
+          <option value="3">${_('Technical problems')}</option>
+        </select>
+and translates so on.
+
 Installation
 ------------
 
