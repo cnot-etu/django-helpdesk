@@ -66,7 +66,7 @@
     margin-top: 4px;
   }
 
-  .helpdesk-widget .input-list-selection, .helpdesk-widget .input-text, .helpdesk-widget #textarea-body {
+  .helpdesk-widget select, .helpdesk-widget input, .helpdesk-widget #textarea-body {
     font-size: 14px;
     line-height: 1.4;
     color: #555;
@@ -81,30 +81,30 @@
     transition: border-color ease-in-out .15s;
   }
 
-  .helpdesk-widget .input-list-selection {
+  .helpdesk-widget select {
     width: 100%;
     color: #757575;
     display: block;
     height: 34px;
     padding: 6px 12px;
   }
-  .helpdesk-widget .input-list-selection:focus {
+  .helpdesk-widget select:focus {
     border-color: #66afe9;
   }
-  .helpdesk-widget .input-list-selection > option {
+  .helpdesk-widget select > option {
     color: #333;
   }
 
-  .helpdesk-widget .input-text, .helpdesk-widget #textarea-body {
+  .helpdesk-widget input, .helpdesk-widget #textarea-body {
     user-select: text;
   }
 
-  .helpdesk-widget .input-text {
+  .helpdesk-widget input {
     width: 100%;
     height: 30px;
     padding: 5px;
   }
-  .helpdesk-widget .input-text:focus {
+  .helpdesk-widget input:focus {
     border-color: #66afe9;
   }
 
@@ -116,7 +116,7 @@
     padding: 6px 12px;
   }
 
-  .helpdesk-widget .next-button {
+  .helpdesk-widget button {
     width: 100px;
     height: 30px;
     font-size: 14px;
@@ -131,7 +131,7 @@
     position: absolute;
   }
 
-  .helpdesk-widget .next-button:hover {
+  .helpdesk-widget button:hover {
     background-color: #174d92;
     transition: .15s;
   }
@@ -157,24 +157,23 @@
 </style>
 
 <script type="text/javascript">
+    d = document;
     const format_body = function() {
         let data = {
-            "queue": document.getElementsByClassName("input-list-selection")[0].value,
-            "title": document.getElementsByClassName("input-text")[0].value,
+            "queue": d.getElementById("select_type").value,
+            "title": d.getElementById("summary").value,
             "attachment": "",
-            "body": document.getElementById("textarea-body").value,
-            "priority": document.getElementsByClassName("input-list-selection")[1].value,
+            "body": d.getElementById("textarea-body").value,
+            "priority": d.getElementById("select_priority").value,
             "due_date": "",
-            "submitter_email": document.getElementsByClassName("input-text")[1].value,
-            "csrfmiddlewaretoken": "${csrf_token}",
+            "submitter_email": d.getElementById("email").value,
+            "csrfmiddlewaretoken": "${ csrf_token }",
         }
 
         const formData = new FormData();
-
         for (const name in data) {
             formData.append(name, data[name]);
         }
-
         return formData;
     }
 
@@ -189,18 +188,21 @@
         });
     }
 
-    d = document;
-    d.Id = d.getElementById;
-    d.Name = d.getElementsByClassName;
     d.addEventListener("DOMContentLoaded", function(event) {
-        d.Id('open-widget-btn').onclick = function() {
-            if (d.Id('helpdesk-inner-frame').style.display == "none") {
-                d.Id('helpdesk-inner-frame').style.display = d.Id('next-btn-id').style.display = "block";
-                d.Id('steps-indicator').innerHTML = "1 of 3";
+        steps = d.getElementById("steps-indicator");
+        step_1 = d.getElementById("step-1");
+        step_2 = d.getElementById("step-2");
+        step_3 = d.getElementById("step-3");
+
+        d.getElementById('open-widget-btn').onclick = function() {
+
+            frame = d.getElementById("helpdesk-inner-frame");
+            if (frame.style.display == "none") {
+                frame.style.display = frame.style.display = "block";
+                steps.innerHTML = "1 of 3";
             } else {
-                d.Id('step-1').style.display = "block";
-                d.Id('helpdesk-inner-frame').style.display = d.Id('step-2').style.display =
-                d.Id('step-3').style.display = "none";
+                step_1.style.display = "block";
+                frame.style.display = step_2.style.display = step_3.style.display = "none";
             }
         }
 
@@ -209,55 +211,71 @@
         let red_shadow = "inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(153, 22, 22,.6)";
         let blue_shadow = "inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)";
 
-        d.Id('next-btn-id').onclick = function() {
-            if(!d.Id("select_type").value.trim()){
-              d.Id("select_type").style.borderColor = red_color; d.Id("select_type").style.boxShadow = red_shadow;
+        next = d.getElementById("next-btn-id");
+        next.onclick = function() {
+            queue = d.getElementById("select_type");
+            if(!queue.value.trim()){
+              queue.style.borderColor = red_color; 
+              queue.style.boxShadow = red_shadow;
               return;
             }
             else {
-              d.Id("select_type").style.borderColor = blue_color; d.Id("select_type").style.boxShadow = blue_shadow;
+              queue.style.borderColor = blue_color; 
+              queue.style.boxShadow = blue_shadow;
             }
-            if(!d.Id("textarea-body").value.trim()){
-              d.Id("textarea-body").style.borderColor = red_color; d.Id("textarea-body").style.boxShadow = red_shadow;
+            description = d.getElementById("textarea-body");
+            if(!description.value.trim()){
+              description.style.borderColor = red_color;
+              description.style.boxShadow = red_shadow;
               return;
             }
             else {
-              d.Id("textarea-body").style.borderColor = blue_color; d.Id("textarea-body").style.boxShadow = blue_shadow;
+              description.style.borderColor = blue_color;
+              description.style.boxShadow = blue_shadow;
             }
 
-            if (d.Id('step-1').style.display != "none") {
-                d.Id('step-1').style.display = "none"; d.Id('step-2').style.display = "block";
-                d.Id('steps-indicator').innerHTML = "2 of 3";
-            } else if (d.Id('step-2').style.display == "block") {
-              if(!d.Id("select_priority").value.trim()){
-                d.Id("select_priority").style.borderColor = red_color; d.Id("select_priority").style.boxShadow = red_shadow;
+            priority = d.getElementById("select_priority");
+            summary = d.getElementById("summary");
+            email = d.getElementById("email");
+            if (step_1.style.display != "none") {
+              step_1.style.display = "none"; step_2.style.display = "block";
+              steps.innerHTML = "2 of 3";
+              email.value = "${ user.email }";
+            } else if (step_2.style.display == "block") {
+              if(!priority.value.trim()){
+                priority.style.borderColor = red_color;
+                priority.style.boxShadow = red_shadow;
                 return;
               }
               else {
-                d.Id("select_priority").style.borderColor = blue_color; d.Id("select_priority").style.boxShadow = blue_shadow;
+                priority.style.borderColor = blue_color;
+                priority.style.boxShadow = blue_shadow;
               }
-              if(!d.Id("summary").value.trim()){
-                d.Id("summary").style.borderColor = red_color; d.Id("summary").style.boxShadow = red_shadow;
+              if(!summary.value.trim()){
+                summary.style.borderColor = red_color;
+                summary.style.boxShadow = red_shadow;
                 return;
               }
               else {
-                d.Id("summary").style.borderColor = blue_color; d.Id("summary").style.boxShadow = blue_shadow;
+                summary.style.borderColor = blue_color;
+                summary.style.boxShadow = blue_shadow;
               }
-              if(!d.Id("email").value.trim()){
-                d.Id("email").style.borderColor = red_color; d.Id("email").style.boxShadow = red_shadow;
+              if(!email.value.trim()){
+                email.style.borderColor = red_color;
+                email.style.boxShadow = red_shadow;
                 return;
               }
               else {
-                d.Id("email").style.borderColor = blue_color; d.Id("email").style.boxShadow = blue_shadow;
+                email.style.borderColor = blue_color;
+                email.style.boxShadow = blue_shadow;
               }
 
-              if (!d.Name("input-text")[0].value.trim() || !d.Name("input-text")[1].value.trim() ||
-                  !d.Name("input-list-selection")[1].value) {
-                  return
+              if (!summary.value.trim() || !email.value.trim() || !priority.value) {
+                  return;
               }
-              d.Id('step-3').style.display = "block";
-              d.Id('step-2').style.display = d.Id('next-btn-id').style.display = "none";
-              d.Id('steps-indicator').innerHTML = "3 of 3";
+              step_3.style.display = "block";
+              step_2.style.display = next.style.display = "none";
+              steps.innerHTML = "3 of 3";
 
               send_request();
             }
@@ -271,7 +289,7 @@
     <form>
       <div id="step-1">
         <h3>${_('Create Ticket')}</h3>
-        <select class="input-list-selection" id="select_type">
+        <select id="select_type">
           <option value="">${_('Queue')}</option>
           <option value="1">${_('While taking course')}</option>
           <option value="2">${_('While creating course')}</option>
@@ -282,7 +300,7 @@
 
       <div id="step-2" style="display: none">
         <h3>${_('Create Ticket')}</h3>
-        <select class="input-list-selection" id="select_priority">
+        <select id="select_priority">
           <option value="">${_('Priority')}</option>
           <option value="1">${_('1. Critical')}</option>
           <option value="2">${_('2. High')}</option>
@@ -290,9 +308,9 @@
           <option value="4">${_('4. Low')}</option>
           <option value="5">${_('5. Very Low')}</option>
         </select>
-        <input class="input-text" id="summary" type="text" placeholder="${_('Got an 403 error')}">
+        <input id="summary" type="text" placeholder="${_('Got an 403 error')}">
         <span>${_('Summary of the problem')}</span>
-        <input class="input-text" id="email" type="text" placeholder="example@domain.com">
+        <input id="email" type="email" placeholder="example@domain.com">
         <span>${_('E-Mail') }</span>
       </div>
 
@@ -300,7 +318,7 @@
         <h2>${_('Complete! We started processig your ticket')}</h2>
       </div>
 
-      <button class="next-button" id="next-btn-id" type="button">${_('Next')}</button>
+      <button id="next-btn-id" type="button">${_('Next')}</button>
     </form>
   </div>
   <div id="open-widget-btn"></div>
