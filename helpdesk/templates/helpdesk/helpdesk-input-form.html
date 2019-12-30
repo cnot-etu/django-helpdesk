@@ -178,9 +178,9 @@
     }
 
     const send_request = function() {
-        fetch("/helpdesk/", {
+        fetch("/helpdesk/tickets/submit/", {
             "credentials": "include",
-            "referrer": "/helpdesk/",
+            "referrer": "/helpdesk/tickets/submit/",
             "referrerPolicy": "no-referrer-when-downgrade",
             "body": format_body(),
             "method": "POST",
