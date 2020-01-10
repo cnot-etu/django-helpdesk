@@ -6,11 +6,10 @@
   .helpdesk-widget {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 
     user-select: none;
     transition: .25s;
-    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font: normal 1em/1em "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 
     right: 15px;
     bottom: 15px;
@@ -18,12 +17,15 @@
     z-index: 11;
   }
 
-  .helpdesk-widget h3, .helpdesk-widget h2 {
-    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+  .helpdesk-widget h2 {
+    font: normal 1.5em/1.5em "Open Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+    color: #646464;
   }
 
   .helpdesk-widget h3 {
-    margin-bottom: 10px;
+    margin-bottom: 15px;
+    font: inherit;
+    font-size: 1.2em;
   }
 
   .helpdesk-widget form {
@@ -31,6 +33,7 @@
     padding: 10px 20px;
     position: relative;
     z-index: 100;
+    box-sizing: initial;
   }
 
   .helpdesk-widget select {
@@ -55,6 +58,7 @@
     color: #eee;
     display: grid;
     grid-template-columns: 1fr 60px;
+    box-sizing: initial;
   }
 
   .helpdesk-widget #step-2 > span {
@@ -97,6 +101,7 @@
 
   .helpdesk-widget input, .helpdesk-widget #textarea-body {
     user-select: text;
+    font: italic 300 .9em/1.6em Georgia,Cambria,"Times New Roman",Times,serif;
   }
 
   .helpdesk-widget input {
@@ -120,8 +125,10 @@
     width: 100px;
     height: 30px;
     font-size: 14px;
+    letter-spacing: 1px;
     color: rgb(162, 205, 244);
     border: none;
+    border-radius: 5px;
     padding: 0;
     box-shadow: 0 0 5px rgba(115,115,115,0.75);
     background: rgb(1, 48, 110);
@@ -137,7 +144,6 @@
   }
 
   .helpdesk-widget #step-3 {
-    color: #05336E;
     padding-top: 60px;
     text-align: center;
   }
