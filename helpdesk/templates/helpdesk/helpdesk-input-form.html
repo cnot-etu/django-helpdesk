@@ -144,7 +144,7 @@
   }
 
   .helpdesk-widget #step-3 {
-    padding-top: 60px;
+    padding-top: 40px;
     text-align: center;
   }
 
@@ -184,9 +184,9 @@
     }
 
     const send_request = function() {
-        fetch("/helpdesk/tickets/submit/", {
+        fetch("/helpdesk/", {
             "credentials": "include",
-            "referrer": "/helpdesk/tickets/submit/",
+            "referrer": "/helpdesk/",
             "referrerPolicy": "no-referrer-when-downgrade",
             "body": format_body(),
             "method": "POST",
@@ -321,7 +321,7 @@
       </div>
 
       <div id="step-3" style="display: none">
-        <h2>${_('Complete! We started processig your ticket')}</h2>
+        <h2>${_('Ready! If you not received a email notification, contact cnot@etu.ru')}</h2>
       </div>
 
       <button id="next-btn-id" type="button">${_('Next')}</button>
