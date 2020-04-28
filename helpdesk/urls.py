@@ -51,6 +51,7 @@ urlpatterns = [
 
     url(r'^tickets/(?P<ticket_id>[0-9]+)/$',
         staff.view_ticket,
+        #login_required(),
         name='view'),
 
     url(r'^tickets/(?P<ticket_id>[0-9]+)/followup_edit/(?P<followup_id>[0-9]+)/$',

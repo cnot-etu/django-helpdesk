@@ -30,7 +30,7 @@ from helpdesk.forms import (
     TicketForm, UserSettingsForm, EmailIgnoreForm, EditTicketForm, TicketCCForm,
     TicketCCEmailForm, TicketCCUserForm, EditFollowUpForm, TicketDependencyForm
 )
-from helpdesk.decorators import staff_member_required, superuser_required
+from helpdesk.decorators import staff_member_required, superuser_required, staff_member_or_submitter_required
 from helpdesk.lib import (
     send_templated_mail, apply_query, safe_template_context,
     process_attachments, queue_template_context,
@@ -82,7 +82,7 @@ def _is_my_ticket(user, ticket):
         user_is_submitter = user.email == ticket.submitter_email
     except:
         user_is_submitter = False
-    if user.is_superuser or user.is_staff or user.id == ticket.assigned_to.id or user_is_submitter:
+    if user.is_superuser or user.is_staff or user_is_submitter:
         return True
     else:
         return False
@@ -237,7 +237,8 @@ def followup_delete(request, ticket_id, followup_id):
     return HttpResponseRedirect(reverse('helpdesk:view', args=[ticket.id]))
 
 
-@staff_member_required
+#@staff_member_required
+@staff_member_or_submitter_required
 def view_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id)
     if not _has_access_to_queue(request.user, ticket.queue):
