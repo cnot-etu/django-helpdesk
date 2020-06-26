@@ -15,6 +15,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
 from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import Q
 from django.http import HttpResponseRedirect, Http404, HttpResponse
 from django.shortcuts import render, get_object_or_404
@@ -95,6 +96,15 @@ def dashboard(request):
     showing ticket counts by queue/status, and a list of unassigned tickets
     with options for them to 'Take' ownership of said tickets.
     """
+
+    # user settings num tickets per page
+    tickets_per_page = request.user.usersettings_helpdesk.settings.get('tickets_per_page') or 25
+
+    # page vars for the three ticket tables
+    user_tickets_page = request.GET.get(_('ut_page'), 1)
+    user_tickets_closed_resolved_page = request.GET.get(_('utcr_page'), 1)
+    all_tickets_reported_by_current_user_page = request.GET.get(_('atrbcu_page'), 1)
+
     # open & reopened tickets, assigned to current user
     tickets = Ticket.objects.select_related('queue').filter(
         assigned_to=request.user,
@@ -144,6 +154,41 @@ def dashboard(request):
                         q.id IN (%s)""" % (",".join(("%d" % pk for pk in queues)))
     else:
         where_clause = """WHERE   q.id = t.queue_id"""
+
+    # get user assigned tickets page
+    paginator = Paginator(
+        tickets, tickets_per_page)
+    try:
+        tickets = paginator.page(user_tickets_page)
+    except PageNotAnInteger:
+        tickets = paginator.page(1)
+    except EmptyPage:
+        tickets = paginator.page(
+            paginator.num_pages)
+
+    # get user completed tickets page
+    paginator = Paginator(
+        tickets_closed_resolved, tickets_per_page)
+    try:
+        tickets_closed_resolved = paginator.page(
+            user_tickets_closed_resolved_page)
+    except PageNotAnInteger:
+        tickets_closed_resolved = paginator.page(1)
+    except EmptyPage:
+        tickets_closed_resolved = paginator.page(
+            paginator.num_pages)
+
+    # get user submitted tickets page
+    paginator = Paginator(
+        all_tickets_reported_by_current_user, tickets_per_page)
+    try:
+        all_tickets_reported_by_current_user = paginator.page(
+            all_tickets_reported_by_current_user_page)
+    except PageNotAnInteger:
+        all_tickets_reported_by_current_user = paginator.page(1)
+    except EmptyPage:
+        all_tickets_reported_by_current_user = paginator.page(
+            paginator.num_pages)
 
     return render(request, 'helpdesk/dashboard.html', {
         'user_tickets': tickets,
@@ -1449,16 +1494,17 @@ def ticket_dependency_add(request, ticket_id):
         raise PermissionDenied()
     if not _is_my_ticket(request.user, ticket):
         raise PermissionDenied()
-    if request.method == 'POST':
-        form = TicketDependencyForm(request.POST)
-        if form.is_valid():
-            ticketdependency = form.save(commit=False)
-            ticketdependency.ticket = ticket
-            if ticketdependency.ticket != ticketdependency.depends_on:
-                ticketdependency.save()
-            return HttpResponseRedirect(reverse('helpdesk:view', args=[ticket.id]))
-    else:
-        form = TicketDependencyForm()
+
+    form = TicketDependencyForm(request.POST or None)
+    # A ticket cannot depends on itself or on a ticket already depending on it
+    form.fields['depends_on'].queryset = Ticket.objects.exclude(
+        Q(id=ticket.id) | Q(ticketdependency__depends_on=ticket)
+    )
+    if form.is_valid():
+        ticketdependency = form.save(commit=False)
+        ticketdependency.ticket = ticket
+        ticketdependency.save()
+        return HttpResponseRedirect(reverse('helpdesk:view', args=[ticket.id]))
     return render(request, 'helpdesk/ticket_dependency_add.html', {
         'ticket': ticket,
         'form': form,
