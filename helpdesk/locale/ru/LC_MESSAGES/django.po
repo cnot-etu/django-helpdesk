@@ -2807,89 +2807,50 @@ msgstr "Очереди по Статусам"
 msgid "Queue by Month"
 msgstr "Очереди по Месяцам"
 
-#~ msgid "Description of Issue"
-#~ msgstr "Описание проблемы"
+msgid "Description of Issue"
+msgstr "Описание проблемы"
 
-#~ msgid "Summary of your query"
-#~ msgstr "Краткое описание вашего запроса"
+msgid "Summary of your query"
+msgstr "Краткое описание вашего запроса"
 
-#~ msgid "Urgency"
-#~ msgstr "Срочность"
+msgid "Urgency"
+msgstr "Срочность"
 
-#~ msgid "Please select a priority carefully."
-#~ msgstr "Пожалуйста, тщательно выберите приоритеты."
+msgid "Please select a priority carefully."
+msgstr "Пожалуйста, тщательно выберите приоритеты."
 
-#~ msgid "E-mail me when a ticket is changed via the API?"
-#~ msgstr "Уведомить меня когда тикет изменён через API?"
+msgid " (Reopened)"
+msgstr " (Возобновлено)"
 
-#~ msgid "If a ticket is altered by the API, do you want to receive an e-mail?"
-#~ msgstr ""
-#~ "Хотите ли вы получать электронное уведомление если тикет был изменён "
-#~ "через API"
+msgid " (Updated)"
+msgstr "(Обновлено)"
 
-#~ msgid " (Reopened)"
-#~ msgstr " (Возобновлено)"
+msgid "Days since opened"
+msgstr "Дней с момента открытия"
 
-#~ msgid " (Updated)"
-#~ msgstr "(Обновлено)"
+msgid "Number of open tickets"
+msgstr "Число открытых тикетов"
 
-#~ msgid "RSS Icon"
-#~ msgstr "Иконка RSS"
+msgid "Next"
+msgstr "Вперёд"
 
-#~ msgid "API"
-#~ msgstr "API"
+msgid "Problem description"
+msgstr "Подробное описание проблемы"
 
-#~ msgid "Days since opened"
-#~ msgstr "Дней с момента открытия"
+msgid "While taking course"
+msgstr "Проблемы с прохождением курсов"
 
-#~ msgid "Number of open tickets"
-#~ msgstr "Число открытых тикетов"
+msgid "While creating course"
+msgstr "Проблемы с созданием курсов"
 
-#~ msgid "Knowledgebase Category: %(kbcat)s"
-#~ msgstr "Категория Базы Знаний: %(kbcat)s"
+msgid "Technical problems"
+msgstr "Технические проблемы"
 
-#~ msgid "Article"
-#~ msgstr "Статья"
+msgid "Distance learning"
+msgstr "Дистанционное обучение"
 
-#~ msgid "Knowledgebase: %(item)s"
-#~ msgstr "База Знаний: %(item)s"
+msgid "Complete! We started processig your ticket"
+msgstr "Готово! Мы получили вашу заявку"
 
-#~ msgid "Feedback"
-#~ msgstr "Обратная Связь"
-
-#~ msgid ""
-#~ "We give our users an opportunity to vote for items that they believe have "
-#~ "helped them out, in order for us to better serve future customers. We "
-#~ "would appreciate your feedback on this article. Did you find it useful?"
-#~ msgstr ""
-#~ "Мы предоставляем нашим пользователям возможность голосовать за статьи, "
-#~ "которые по их мнению, способствовали им, с тем чтобы мы могли лучше "
-#~ "обслуживать клиентов в будущем. Мы будем признательны за ваши отзывы на "
-#~ "эту статью. Было ли это полезным?"
-
-#~ msgid "This article was useful to me"
-#~ msgstr "Эта статья была полезна для меня"
-
-#~ msgid "This article was <strong>not</strong> useful to me"
-#~ msgstr "Эта статья была <strong>бесполезна</strong> для меня"
-
-#~ msgid "Accept"
-#~ msgstr "Принять"
-
-#~ msgid "Open Tickets"
-#~ msgstr "Открытые Тикеты"
-
-#~ msgid "Attach another File"
-#~ msgstr "Прикрепить другой файл"
-
-#~ msgid "Yes, Delete"
-#~ msgstr "Удалить"
-
-#~ msgid "Previous"
-#~ msgstr "Предыдущий"
-
-#~ msgid "Page %(ticket_num)s of %(num_pages)s."
-#~ msgstr "Страница %(ticket_num)s из %(num_pages)s."
-
-#~ msgid "Next"
-#~ msgstr "Следующая"
+msgid "Got an 403 error"
+msgstr "Ошибка 403"

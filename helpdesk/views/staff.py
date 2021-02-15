@@ -83,7 +83,11 @@ def _is_my_ticket(user, ticket):
         user_is_submitter = user.email == ticket.submitter_email
     except:
         user_is_submitter = False
-    if user.is_superuser or user.is_staff or user_is_submitter:
+    try:
+        exception = user.id == ticket.assigned_to.id
+    except:
+        exception = False
+    if user.is_superuser or user.is_staff or user_is_submitter or exception:
         return True
     else:
         return False
@@ -611,6 +615,16 @@ def update_ticket(request, ticket_id, public=False):
             )
             messages_sent_to.append(ticket.submitter_email)
 
+        if f.user != old_owner:
+            send_templated_mail(
+                'assigned_owner',
+                context,
+                recipients=f.user,
+                sender=ticket.queue.from_address,
+                fail_silently=True,
+                files=files,
+            )
+
         template_suffix = 'cc'
 
         for cc in ticket.ticketcc_set.all():
@@ -737,6 +751,18 @@ def mass_update(request):
                          public=True,
                          user=request.user)
             f.save()
+
+            context = safe_template_context(t)
+            context.update(resolution=t.resolution,
+                           queue=queue_template_context(t.queue))
+            send_templated_mail(
+                'assigned_owner',
+                context,
+                recipients=t.assigned_to,
+                sender=t.queue.from_address,
+                fail_silently=True
+            )
+
         elif action == 'unassign' and t.assigned_to is not None:
             t.assigned_to = None
             t.save()
