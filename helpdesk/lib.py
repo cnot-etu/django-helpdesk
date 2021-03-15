@@ -115,10 +115,13 @@ def send_templated_mail(template_name,
             recipients = recipients.split(',')
     elif type(recipients) != list:
         recipients = [recipients]
+    emails = []
+    for recipient in recipients:
+        emails.append(recipient.email)
 
     msg = EmailMultiAlternatives(subject_part, text_part,
                                  sender or settings.DEFAULT_FROM_EMAIL,
-                                 recipients, bcc=bcc)
+                                 emails, bcc=bcc)
     msg.attach_alternative(html_part, "text/html")
 
     if files:
