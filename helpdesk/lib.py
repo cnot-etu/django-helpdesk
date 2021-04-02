@@ -117,7 +117,10 @@ def send_templated_mail(template_name,
         recipients = [recipients]
     emails = []
     for recipient in recipients:
-        emails.append(recipient.email)
+        try:
+            emails.append(recipient.email)
+        except:
+            emails.append(recipient)
 
     msg = EmailMultiAlternatives(subject_part, text_part,
                                  sender or settings.DEFAULT_FROM_EMAIL,
